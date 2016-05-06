@@ -1,17 +1,38 @@
 package com.android.ticker.managers;
 
 
+import java.util.ArrayList;
+
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.widget.ImageView;
 
 import com.android.ticker.managers.networks.HttpManager;
 import com.android.ticker.managers.networks.HttpManager.HttpDownLoadResp;
+import com.android.ticker.managers.networks.HttpManager.HttpExecuteResp;
 
 public class LoginManage {
 
+	private class Point {
+		private int x;
+		private int y;
+		public Point(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
+	}
+	
+	private HttpManager mHttpManager;
+	private ArrayList<Point> mPoints; 
+	
 	public LoginManage() {
-		
+		mPoints = new ArrayList<LoginManage.Point>();
+		mHttpManager = new HttpManager();
+	}
+	
+	public void addPoint(int x, int y) {
+		Point point = new Point(x, y);
+		mPoints.add(point);
 	}
 
 	//获取验证码图片
@@ -19,6 +40,31 @@ public class LoginManage {
 //	注意：rand=sjrand  登录状态下验证码图片
 //	     rand=randp 登录状态下验证码图片
 	
+	public void getRandomCodeImage(Handler handler, ImageView showImageView) {
+
+		final ImageView imageView = showImageView;
+		final Handler handle = handler;
+		
+//		mHttpManager = new HttpManager();
+		double rand = Math.random();
+		String url = "https://kyfw.12306.cn/otn/passcodeNew/getPassCodeNew?module=login&rand=sjrand&" + rand;
+		mHttpManager.downLoadHttpRequest(url, new HttpDownLoadResp() {
+			
+			@Override
+			public void httpDownLoadResp(final Bitmap bitMap) {
+				// TODO Auto-generated method stub
+				handle.post(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						imageView.setImageBitmap(bitMap);
+					}
+				});
+
+			}
+		});
+	}
 	
 	//验证码
 //	https://kyfw.12306.cn/otn/passcodeNew/checkRandCodeAnsyn
@@ -36,6 +82,34 @@ public class LoginManage {
 //	X-Requested-With:XMLHttpRequest
 //	content:randCode=238%2C69%2C92%2C131&rand=sjrand	
 	
+	private String packageContent() {
+		String content = new String();
+		for (int i = 0; i < mPoints.size(); i ++) {
+			if (i != 0) {
+				content += ",";
+			}
+			Point point = mPoints.get(i);
+			String x = String.valueOf(point.x);
+			String y = String.valueOf(point.y);
+			content = content + x + "," + y ;
+		}
+		return content;
+	}
+	
+	public void checkRandomCode() {
+		
+		String url = "https://kyfw.12306.cn/otn/passcodeNew/checkRandCodeAnsyn";
+		
+		String content = packageContent();
+		mHttpManager.postHttpRequest(url, content, new HttpExecuteResp() {
+			
+			@Override
+			public void httpExecuteResp(String data) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+	}
 	//登录
 //	https://kyfw.12306.cn/otn/login/loginAysnSuggest		
 //	Accept:*/*
@@ -52,30 +126,8 @@ public class LoginManage {
 //	X-Requested-With:XMLHttpRequest
 //	content:loginUserDTO.user_name=ygf420131591&userDTO.password=ygf111040682&randCode=238%2C69%2C92%2C131
 	
-	public void getRandomCodeImage(Handler handler, ImageView showImageView) {
-
-		final ImageView imageView = showImageView;
-		final Handler handle = handler;
+	public void login() {
 		
-		HttpManager http = new HttpManager();
-		double rand = Math.random();
-		String url = "https://kyfw.12306.cn/otn/passcodeNew/getPassCodeNew?module=login&rand=sjrand&" + rand;
-		http.downLoadHttpRequest(url, new HttpDownLoadResp() {
-			
-			@Override
-			public void httpDownLoadResp(final Bitmap bitMap) {
-				// TODO Auto-generated method stub
-				handle.post(new Runnable() {
-					
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-						imageView.setImageBitmap(bitMap);
-					}
-				});
-
-			}
-		});
 	}
 	
 	public interface LoginResponse {

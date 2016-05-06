@@ -4,10 +4,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+
     <ImageView
         android:id="@+id/randomCodeImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="293dp"
+        android:layout_height="190dp"
         android:layout_gravity="center" />
+    
+      <ImageButton
+        android:id="@+id/LoginImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
     
 </LinearLayout>
