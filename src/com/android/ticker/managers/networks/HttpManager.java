@@ -133,7 +133,7 @@ public class HttpManager {
 	/*
 	 * 
 	 * */
-	public void postHttpRequest(final String url, final String content, HttpExecuteResp response) {
+	public void postHttpRequest(final String url, final ArrayList<NameValuePair> nvps, HttpExecuteResp response) {
 		
 		final HttpExecuteResp httpResponse = response;
 		Thread thread = new Thread(new Runnable() {
@@ -149,16 +149,8 @@ public class HttpManager {
 //					request.addHeader("Referer", "https://kyfw.12306.cn/otn/login/init");
 //					request.addHeader("Origin", "https://kyfw.12306.cn");
 //					request.addHeader("Accept", "*/*");
-					
-					ArrayList<NameValuePair> nvps = new ArrayList<NameValuePair>();
-					nvps.add(new BasicNameValuePair("randCode", content));
-					nvps.add(new BasicNameValuePair("rand", "sjrand"));
+
 					request.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
-					
-//					StringEntity entity = new StringEntity(content, "utf-8");
-//					entity.setContentEncoding("UTF-8");
-//					entity.setContentType("application/json");
-//					request.setEntity(entity);
 					
 					HttpResponse response = mHttpClient.execute(request);
 					if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {

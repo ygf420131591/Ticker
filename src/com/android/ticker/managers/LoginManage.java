@@ -3,6 +3,9 @@ package com.android.ticker.managers;
 
 import java.util.ArrayList;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.widget.ImageView;
@@ -24,6 +27,7 @@ public class LoginManage {
 	
 	private HttpManager mHttpManager;
 	private ArrayList<Point> mPoints; 
+	private String mContent;
 	
 	public LoginManage() {
 		mPoints = new ArrayList<LoginManage.Point>();
@@ -100,16 +104,20 @@ public class LoginManage {
 		
 		String url = "https://kyfw.12306.cn/otn/passcodeNew/checkRandCodeAnsyn";
 		
-		String content = packageContent();
-		mHttpManager.postHttpRequest(url, content, new HttpExecuteResp() {
+		mContent = packageContent();
+		ArrayList<NameValuePair> nvps = new ArrayList<NameValuePair>();
+		nvps.add(new BasicNameValuePair("randCode", mContent));
+		nvps.add(new BasicNameValuePair("rand", "sjrand"));
+		
+		mHttpManager.postHttpRequest(url, nvps, new HttpExecuteResp() {
 			
 			@Override
 			public void httpExecuteResp(String data) {
 				// TODO Auto-generated method stub
-				
+				login();
 			}
 		});
-	}
+	}	
 	//µÇÂ¼
 //	https://kyfw.12306.cn/otn/login/loginAysnSuggest		
 //	Accept:*/*
@@ -127,7 +135,22 @@ public class LoginManage {
 //	content:loginUserDTO.user_name=ygf420131591&userDTO.password=ygf111040682&randCode=238%2C69%2C92%2C131
 	
 	public void login() {
+		String url = "https://kyfw.12306.cn/otn/login/loginAysnSuggest";
 		
+		String content = packageContent();
+		ArrayList<NameValuePair> nvps = new ArrayList<NameValuePair>();
+		nvps.add(new BasicNameValuePair("loginUserDTO.user_name", "ygf420131591"));
+		nvps.add(new BasicNameValuePair("userDTO.password", "ygf111040682"));
+		nvps.add(new BasicNameValuePair("randCode", mContent));
+		
+		mHttpManager.postHttpRequest(url, nvps, new HttpExecuteResp() {
+			
+			@Override
+			public void httpExecuteResp(String data) {
+				// TODO Auto-generated method stub
+	
+			}
+		});
 	}
 	
 	public interface LoginResponse {
