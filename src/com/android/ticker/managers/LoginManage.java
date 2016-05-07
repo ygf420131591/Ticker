@@ -8,11 +8,17 @@ import org.apache.http.message.BasicNameValuePair;
 
 import android.graphics.Bitmap;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.ImageView;
 
+import com.android.ticker.managers.entitys.CheckLoginEntity;
+import com.android.ticker.managers.entitys.LoginResultEntity;
+import com.android.ticker.managers.entitys.PassengerInfoEntity;
+import com.android.ticker.managers.entitys.RandomCodeEntity;
 import com.android.ticker.managers.networks.HttpManager;
 import com.android.ticker.managers.networks.HttpManager.HttpDownLoadResp;
 import com.android.ticker.managers.networks.HttpManager.HttpExecuteResp;
+import com.google.gson.Gson;
 
 public class LoginManage {
 
@@ -28,10 +34,15 @@ public class LoginManage {
 	private HttpManager mHttpManager;
 	private ArrayList<Point> mPoints; 
 	private String mContent;
+	private Gson gson;
+
+	private ImageView mImageView;
+	private Handler mHandle;
 	
 	public LoginManage() {
 		mPoints = new ArrayList<LoginManage.Point>();
 		mHttpManager = new HttpManager();
+		gson = new Gson();
 	}
 	
 	public void addPoint(int x, int y) {
@@ -46,8 +57,8 @@ public class LoginManage {
 	
 	public void getRandomCodeImage(Handler handler, ImageView showImageView) {
 
-		final ImageView imageView = showImageView;
-		final Handler handle = handler;
+		mImageView = showImageView;
+		mHandle = handler;
 		
 //		mHttpManager = new HttpManager();
 		double rand = Math.random();
@@ -57,12 +68,12 @@ public class LoginManage {
 			@Override
 			public void httpDownLoadResp(final Bitmap bitMap) {
 				// TODO Auto-generated method stub
-				handle.post(new Runnable() {
+				mHandle.post(new Runnable() {
 					
 					@Override
 					public void run() {
 						// TODO Auto-generated method stub
-						imageView.setImageBitmap(bitMap);
+						mImageView.setImageBitmap(bitMap);
 					}
 				});
 
@@ -97,6 +108,7 @@ public class LoginManage {
 			String y = String.valueOf(point.y);
 			content = content + x + "," + y ;
 		}
+		mPoints.clear();
 		return content;
 	}
 	
@@ -114,7 +126,13 @@ public class LoginManage {
 			@Override
 			public void httpExecuteResp(String data) {
 				// TODO Auto-generated method stub
-				login();
+				RandomCodeEntity entity = gson.fromJson(data, RandomCodeEntity.class);
+				if (entity.getResult().equals("1")) {
+					login();
+				} else if (entity.getResult().equals("0")) {
+					getRandomCodeImage(mHandle, mImageView);
+				}
+				
 			}
 		});
 	}	
@@ -148,10 +166,81 @@ public class LoginManage {
 			@Override
 			public void httpExecuteResp(String data) {
 				// TODO Auto-generated method stub
-	
+//				LoginResultEntity entity = gson.fromJson(data, LoginResultEntity.class);
+				
+				checkUserLogin();
 			}
 		});
 	}
+	
+	public void checkUserLogin() {
+		String url = "https://kyfw.12306.cn/otn/login/checkUser";
+		mHttpManager.postHttpRequest(url, null, new HttpExecuteResp() {
+			
+			@Override
+			public void httpExecuteResp(String data) {
+				// TODO Auto-generated method stub
+				CheckLoginEntity entity = gson.fromJson(data, CheckLoginEntity.class);
+				if (entity.getFlag() == true) {
+					getSavaPassagerInfo();
+				}
+			}
+		});
+	}
+	
+	//获取信息
+	public void getSavaPassagerInfo() {
+		String url = "https://kyfw.12306.cn/otn/confirmPassenger/getPassengerDTOs";
+		mHttpManager.postHttpRequest(url, null, new HttpExecuteResp() {
+		
+			@Override
+			public void httpExecuteResp(String data) {
+				// TODO Auto-generated method stub
+				PassengerInfoEntity entity = gson.fromJson(data, PassengerInfoEntity.class);
+				checkOrderInfo();
+			}
+		});
+		
+	}
+	
+	//获取已经保存的乘客信息
+	public void checkOrderInfo() {
+		String url = "https://kyfw.12306.cn/otn/confirmPassenger/checkOrderInfo";
+		mHttpManager.postHttpRequest(url, null, new HttpExecuteResp() {
+			
+			@Override
+			public void httpExecuteResp(String data) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+	
+	}
+	
+	
+//	https://kyfw.12306.cn/otn/confirmPassenger/checkOrderInfo
+//	cancel_flag:2
+//	bed_level_order_num:000000000000000000000000000000
+//	passengerTicketStr:O,0,1,尤晓明,1,410311198810046528,,N
+//	oldPassengerStr:尤晓明,1,410311198810046528,1_
+//	tour_flag:dc
+//	randCode:36,122,181,128,261,128,186,60
+//	_json_att:
+//	REPEAT_SUBMIT_TOKEN:149f39aca99fe014f8353c7e6d3e1018
+		
+		
+//		https://kyfw.12306.cn/otn/confirmPassenger/confirmSingleForQueue?module=cmgp
+//		passengerTicketStr:O,0,1,应国锋,1,330682198710232851,17706532371,N
+//		oldPassengerStr:应国锋,1,330682198710232851,1_
+//		randCode:259,63,257,123,129,124,106,51
+//		purpose_codes:00
+//		key_check_isChange:0C2D186D046C407904D3335780016EB89580F9475704B1BED2C8EA48
+//		leftTicketStr:O055300707M0933001039174800024
+//		train_location:P4
+//		roomType:00
+//		dwAll:N
+//		_json_att:
+//		REPEAT_SUBMIT_TOKEN:ae6437b290dddddf813269248c928053
 	
 	public interface LoginResponse {
 		public void loginResponse();
