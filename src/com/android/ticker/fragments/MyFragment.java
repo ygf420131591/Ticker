@@ -58,6 +58,7 @@ public class MyFragment extends Fragment implements OnTouchListener, OnClickList
 	public void onClick(View arg0) {
 		// TODO Auto-generated method stub
 		mLoginManage.checkRandomCode();
+//		mLoginManage.login();
 	}
 	
 }

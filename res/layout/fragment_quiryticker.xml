@@ -1,13 +1,279 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+   	 android:layout_height="match_parent"
+   	 android:saveEnabled="true">
     
-    <ListView 
+    <LinearLayout
+         android:layout_width="match_parent"
+   	 	android:layout_height="match_parent"
+    	android:orientation="vertical" >
+    
+<!--     <ListView 
         android:id="@+id/tickerListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        ></ListView>
+        ></ListView> -->
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp" 
+        android:layout_gravity="center">
+        
+        <TextView 
+            android:id="@+id/SetOutTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="杭州"
+            android:textSize="25dp"
+            android:textStyle="bold"/>
+        
+        <ImageView 
+            android:id="@+id/freshImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/common_refresh"/>
+        
+        <TextView 
+            android:id="@+id/ArrivalTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:text="北京"
+            android:textSize="25sp"
+            android:textStyle="bold"/>
+        
+    </LinearLayout>
+    
+<!--     分割线 -->
+    <ImageView 
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="#D3D3D3"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:layout_marginTop="15dp">
+        
+        <TextView 
+            android:id="@+id/setoutDataTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:text="出发日期"
+            android:textColor="#D3D3D3"
+            android:textSize="16sp"/>
+        
+        <TextView 
+            android:id="@+id/setoutDataContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:text="2016-05-21"
+            android:textSize="16sp"/>
+        
+        <TextView 
+            android:id="@+id/student"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="70dp"
+            android:text="学生"
+            android:textSize="16sp"/>
+    </LinearLayout>
+    
+     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:layout_marginTop="30dp">
+        
+        <TextView 
+            android:id="@+id/setoutTimeTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:text="出发时间"
+            android:textColor="#D3D3D3"
+            android:textSize="16sp"/>
+        
+        <TextView 
+            android:id="@+id/setoutTimeContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:text="00:00--24:00"
+            android:textSize="16sp"/>
+        
+    </LinearLayout>
+    
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:layout_marginTop="30dp">
+        
+        <TextView 
+            android:id="@+id/sitTypeTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:text="席别        "
+            android:textColor="#D3D3D3"
+            android:textSize="16sp"/>
+        
+        <TextView 
+            android:id="@+id/sitTypeContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:text="不限"
+            android:textSize="16sp"/>
+        
+    </LinearLayout>
+    
+      <!--     分割线 -->
+    <ImageView 
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="#D3D3D3"/>
+    
+	
+    <com.android.ticker.views.SittingTypeView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"/>
+    
+    <!--     分割线 -->
+    <ImageView 
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="#D3D3D3"/>
+    
+    <com.android.ticker.views.PassengerListView 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+        
+    </com.android.ticker.views.PassengerListView>
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@android:color/holo_blue_dark"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp">
+    
+    	<TextView 
+    	    android:layout_width="match_parent"
+    	    android:layout_height="match_parent"
+    	    android:text="查询"
+    	    android:textSize="20sp"
+    	    android:gravity="center"/>
+    
+    </RelativeLayout>
+    
+    
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp">
+        
+        <ImageView 
+            android:layout_width="0sp"
+            android:layout_height="1sp"
+            android:layout_weight="1"
+            android:background="@android:color/holo_blue_dark"
+            android:layout_gravity="center_vertical"/>
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="  最近常用线路  "
+            android:textSize="16sp"/>
+        
+        <ImageView 
+            android:layout_width="0sp"
+            android:layout_height="1sp"
+            android:layout_weight="1"
+            android:background="@android:color/holo_blue_dark"
+            android:layout_gravity="center_vertical"/>
+        
+    </LinearLayout>
+    
+    <!--     分割线 -->
+    <ImageView 
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="#D3D3D3"/>
+    
+    	<TextView 
+    	    android:layout_width="wrap_content"
+       	 	android:layout_height="wrap_content"
+       	 	android:layout_marginTop="10dp"
+        	android:layout_marginLeft="10dp"
+        	android:layout_marginRight="10dp"
+        	android:text="上海-南京"/>
+    
+    	<TextView 
+    	    android:layout_width="wrap_content"
+       	 	android:layout_height="wrap_content"
+       	 	android:layout_marginTop="10dp"
+        	android:layout_marginLeft="10dp"
+        	android:layout_marginRight="10dp"
+        	android:text="上海-南京"/>
+    	
+    	<TextView 
+    	    android:layout_width="wrap_content"
+       	 	android:layout_height="wrap_content"
+       	 	android:layout_marginTop="10dp"
+        	android:layout_marginLeft="10dp"
+        	android:layout_marginRight="10dp"
+        	android:text="上海-南京"/>
+    	
+    	<TextView 
+    	    android:layout_width="wrap_content"
+       	 	android:layout_height="wrap_content"
+       	 	android:layout_marginTop="10dp"
+        	android:layout_marginLeft="10dp"
+        	android:layout_marginRight="10dp"
+        	android:text="上海-南京"/>
+    	
+    	<TextView 
+    	    android:layout_width="wrap_content"
+       	 	android:layout_height="wrap_content"
+       	 	android:layout_marginTop="10dp"
+        	android:layout_marginLeft="10dp"
+        	android:layout_marginRight="10dp"
+        	android:text="上海-南京"/>
+    <!--     分割线 -->
+    <ImageView 
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="#D3D3D3"/>
     
 </LinearLayout>
+</ScrollView>

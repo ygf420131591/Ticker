@@ -34,7 +34,18 @@ public class AudioAdapter extends BaseAdapter {
 		mSources = sources;
 	}
 	
+	public void addList(ArrayList<HashMap<String, Object>> list) {
+		mListItem = list;
+	}
 	
+	@Override
+	public void notifyDataSetChanged() {
+		// TODO Auto-generated method stub
+		super.notifyDataSetChanged();
+	}
+
+
+
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
@@ -71,19 +82,33 @@ public class AudioAdapter extends BaseAdapter {
 			
 		}
 		
-		holder.mTitleTextView.setText((String)mListItem.get(position).get(mKeys[0]));
-		holder.mContentTextView.setText((String)mListItem.get(position).get(mKeys[1]));
-		int sourceId = (int) mListItem.get(position).get(mKeys[2]);
-		holder.mImageView.setImageDrawable(mContext.getResources().getDrawable(sourceId));
-		
-		holder.mImageView.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Log.d("AudioAdapter", "µã»÷click");
-			}
-		});
+		if (mListItem.get(position).containsKey(mKeys[0])) {
+			holder.mTitleTextView.setText((String)mListItem.get(position).get(mKeys[0]));
+			holder.mTitleTextView.setVisibility(View.VISIBLE);
+		} else {
+			holder.mTitleTextView.setVisibility(View.GONE);
+		}
+		if (mListItem.get(position).containsKey(mKeys[1])) {
+			holder.mContentTextView.setText((String)mListItem.get(position).get(mKeys[1]));
+			holder.mContentTextView.setVisibility(View.VISIBLE);
+		} else {
+			holder.mContentTextView.setVisibility(View.GONE);
+		}
+		if (mListItem.get(position).containsKey(mKeys[2])) {
+			int sourceId = (int) mListItem.get(position).get(mKeys[2]);
+			holder.mImageView.setImageDrawable(mContext.getResources().getDrawable(sourceId));
+			holder.mImageView.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					Log.d("AudioAdapter", "µã»÷click");
+				}
+			});
+			holder.mImageView.setVisibility(View.VISIBLE);
+		} else {
+			holder.mImageView.setVisibility(View.GONE);
+		}
 		
 		return convertView;
 	}

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+    <TextView
+        android:id="@+id/AllSittingType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+		android:text="全部"
+		android:gravity="center"
+        android:textSize="16sp"/>
+    
+    <TextView 
+        android:id="@+id/GDCSittingType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+		android:text="G/D/C"
+		android:gravity="center"
+        android:textSize="16sp"/>
+    
+    <TextView 
+        android:id="@+id/ZSittingType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+		android:text="Z字头"
+		android:gravity="center"
+        android:textSize="16sp"/>
+    
+    <TextView 
+        android:id="@+id/TSittingType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+		android:text="T字头"
+		android:gravity="center"
+        android:textSize="16sp"/>
+    
+    <TextView 
+        android:id="@+id/KSittingType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+		android:text="K字头"
+		android:gravity="center"
+        android:textSize="16sp"/>
+    
+    <TextView 
+        android:id="@+id/OtherSittingType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+		android:text="其他"
+		android:gravity="center"
+        android:textSize="16sp"/>
+
+</LinearLayout>

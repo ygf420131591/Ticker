@@ -127,6 +127,10 @@ public class HttpManager {
 			public void run() {
 				// TODO Auto-generated method stub
 				try {
+					if (mHttpClient == null) {
+						mHttpClient = getDefaultHttpClient();
+					}
+					
 					HttpPost request = new HttpPost(url);
 
 					request.addHeader("Connection", "keep-alive");

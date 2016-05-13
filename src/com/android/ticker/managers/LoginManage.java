@@ -197,26 +197,42 @@ public class LoginManage {
 			public void httpExecuteResp(String data) {
 				// TODO Auto-generated method stub
 				PassengerInfoEntity entity = gson.fromJson(data, PassengerInfoEntity.class);
-				checkOrderInfo();
+				getCheckRandomCode(mHandle, mImageView);
 			}
 		});
 		
 	}
 	
-	//获取已经保存的乘客信息
-	public void checkOrderInfo() {
-		String url = "https://kyfw.12306.cn/otn/confirmPassenger/checkOrderInfo";
-		mHttpManager.postHttpRequest(url, null, new HttpExecuteResp() {
+	//获取验证码图片
+//	https://kyfw.12306.cn/otn/passcodeNew/getPassCodeNew?module=login&rand=sjrand&0.16828169995755204
+//	注意：rand=sjrand  登录状态下验证码图片
+//	     rand=randp 登录状态下验证码图片
+	
+	public void getCheckRandomCode(Handler handler, ImageView showImageView) {
+
+		mImageView = showImageView;
+		mHandle = handler;
+		
+//		mHttpManager = new HttpManager();
+		double rand = Math.random();
+		String url = "https://kyfw.12306.cn/otn/passcodeNew/getPassCodeNew?module=login&rand=sjrand&" + rand;
+		mHttpManager.downLoadHttpRequest(url, new HttpDownLoadResp() {
 			
 			@Override
-			public void httpExecuteResp(String data) {
+			public void httpDownLoadResp(final Bitmap bitMap) {
 				// TODO Auto-generated method stub
-				
+				mHandle.post(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						mImageView.setImageBitmap(bitMap);
+					}
+				});
+
 			}
 		});
-	
 	}
-	
 	
 //	https://kyfw.12306.cn/otn/confirmPassenger/checkOrderInfo
 //	cancel_flag:2
@@ -226,8 +242,60 @@ public class LoginManage {
 //	tour_flag:dc
 //	randCode:36,122,181,128,261,128,186,60
 //	_json_att:
-//	REPEAT_SUBMIT_TOKEN:149f39aca99fe014f8353c7e6d3e1018
+//	REPEAT_SUBMIT_TOKEN:149f39aca99fe014f8353c7e6d3e1018 13aaecbda3ea665bf3e41928f3e6d08e
 		
+	
+	//获取已经保存的乘客信息
+	public void checkOrderInfo() {
+		
+		ArrayList<NameValuePair> nvps = new ArrayList<NameValuePair>();
+		nvps.add(new BasicNameValuePair("cancel_flag", "2"));
+		nvps.add(new BasicNameValuePair("bed_level_order_num", "000000000000000000000000000000"));
+		nvps.add(new BasicNameValuePair("passengerTicketStr", "O,0,1,尤晓明,1,410311198810046528,,N"));
+		nvps.add(new BasicNameValuePair("oldPassengerStr", "尤晓明,1,410311198810046528,1_"));
+		nvps.add(new BasicNameValuePair("tour_flag", "dc"));
+		nvps.add(new BasicNameValuePair("randCode", mContent));
+		nvps.add(new BasicNameValuePair("_json_att", ""));
+		nvps.add(new BasicNameValuePair("REPEAT_SUBMIT_TOKEN", "149f39aca99fe014f8353c7e6d3e1018"));
+		
+		String url = "https://kyfw.12306.cn/otn/confirmPassenger/checkOrderInfo";
+		mHttpManager.postHttpRequest(url, null, new HttpExecuteResp() {
+			
+			@Override
+			public void httpExecuteResp(String data) {
+				// TODO Auto-generated method stub
+				confirmOrderInfo();
+			}
+		});
+	
+	}
+	
+	//获取已经保存的乘客信息
+	public void confirmOrderInfo() {
+			
+		ArrayList<NameValuePair> nvps = new ArrayList<NameValuePair>();
+		nvps.add(new BasicNameValuePair("passengerTicketStr", "O,0,1,尤晓明,1,410311198810046528,,N"));
+		nvps.add(new BasicNameValuePair("oldPassengerStr", "尤晓明,1,410311198810046528,1_"));
+		nvps.add(new BasicNameValuePair("randCode", mContent));
+		nvps.add(new BasicNameValuePair("purpose_codes", "00"));
+		nvps.add(new BasicNameValuePair("key_check_isChange", "0C2D186D046C407904D3335780016EB89580F9475704B1BED2C8EA48"));
+		nvps.add(new BasicNameValuePair("leftTicketStr","O055300707M0933001039174800024"));
+		nvps.add(new BasicNameValuePair("train_locatio","P4"));
+		nvps.add(new BasicNameValuePair("dwAll", "N"));
+		nvps.add(new BasicNameValuePair("_json_att", ""));
+		nvps.add(new BasicNameValuePair("REPEAT_SUBMIT_TOKEN", "149f39aca99fe014f8353c7e6d3e1018"));
+
+		String url = "https://kyfw.12306.cn/otn/confirmPassenger/confirmSingleForQueue?module=cmgp";
+		mHttpManager.postHttpRequest(url, null, new HttpExecuteResp() {
+				
+			@Override
+			public void httpExecuteResp(String data) {
+				// TODO Auto-generated method stub
+					
+			}
+		});
+		
+	}
 		
 //		https://kyfw.12306.cn/otn/confirmPassenger/confirmSingleForQueue?module=cmgp
 //		passengerTicketStr:O,0,1,应国锋,1,330682198710232851,17706532371,N
