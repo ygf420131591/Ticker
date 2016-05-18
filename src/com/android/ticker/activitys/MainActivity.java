@@ -66,7 +66,7 @@ public class MainActivity extends FragmentActivity {
 		this.currentFragment = currentFragment;
 		enterFragment(nextFragment);
 		
-		if (isShowBack == true) {
+		if (isShowBack == true) {   //导航栏显示返回按钮
 			mTopBarView.setBackButton(true, new onClickButtonLister() {
 				
 				@Override
@@ -77,10 +77,10 @@ public class MainActivity extends FragmentActivity {
 			});
 		}
 	}
-	
+	//返回上一页面
 	public void backLastFragment(String name) {
 		Bundle bundle = new Bundle();
-		bundle.putString("setOutStation", name);
+		bundle.putString("params", name);
 		currentFragment.setArguments(bundle);
 		enterFragment(currentFragment);
 	}

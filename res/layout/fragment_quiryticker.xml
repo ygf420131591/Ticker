@@ -172,6 +172,7 @@
     </com.android.ticker.views.PassengerListView>
     
     <RelativeLayout
+        android:id="@+id/quiryTickerButton"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:background="@android:color/holo_blue_dark"

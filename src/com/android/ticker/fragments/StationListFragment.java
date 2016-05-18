@@ -39,9 +39,7 @@ public class StationListFragment extends Fragment implements TextWatcher, OnItem
 		
 		View view = inflater.inflate(R.layout.fragment_station_list, container, false);
 		
-		if (mSearchAlgorithm == null) {
-			mSearchAlgorithm = new SearchAlgorithm();
-		}
+		mSearchAlgorithm = SearchAlgorithm.instance();
 		
 		mStationList = (ListView) view.findViewById(R.id.StationList);
 		

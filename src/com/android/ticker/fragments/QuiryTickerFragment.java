@@ -1,33 +1,43 @@
 package com.android.ticker.fragments;
 
-
-import java.nio.channels.SelectableChannel;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import com.android.ticker.activitys.MainActivity;
-import com.android.ticker.views.TopBarView.onClickButtonLister;
+import com.android.ticker.algorithm.SearchAlgorithm;
+import com.android.ticker.managers.QuiryTickerManage;
+import com.android.ticker.managers.entitys.QuiryConditonEntity;
 import com.example.ticker.R;
 
-import android.content.Intent;
+import android.app.DatePickerDialog;
+import android.app.DatePickerDialog.OnDateSetListener;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 //import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class QuiryTickerFragment extends Fragment implements OnClickListener {
+public class QuiryTickerFragment extends Fragment implements OnClickListener, OnDateSetListener {
 
 	private ListView mListView;
 	private TextView mSetOutTextView;
 	private TextView mArriveTextView;
 	
+	private TextView mDateTextView;
+	
+	private Boolean isDestination = false;
+	private RelativeLayout mQuiryButton;
+	
+	private QuiryTickerManage mQuiryTickerManage;
+	private SearchAlgorithm mSearchAlgorithm;
 	@Override
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -35,14 +45,10 @@ public class QuiryTickerFragment extends Fragment implements OnClickListener {
 		
 		View view = inflater.inflate(R.layout.fragment_quiryticker, container, false);
 		
-		String setOutStation = "上海";
-		Bundle bundle = getArguments();
-		if (bundle != null) {
-			setOutStation = bundle.getString("setOutStation");
-		}
+		mQuiryTickerManage = new QuiryTickerManage();
+		mSearchAlgorithm = SearchAlgorithm.instance();
 		
 		mSetOutTextView = (TextView) view.findViewById(R.id.SetOutTextView);
-		mSetOutTextView.setText(setOutStation);
 		mSetOutTextView.setOnClickListener(this);
 		
 		ImageView refreshImageView = (ImageView) view.findViewById(R.id.freshImageView);
@@ -51,6 +57,21 @@ public class QuiryTickerFragment extends Fragment implements OnClickListener {
 		mArriveTextView = (TextView) view.findViewById(R.id.ArrivalTextView);
 		mArriveTextView.setOnClickListener(this);
 		
+		mDateTextView = (TextView)view.findViewById(R.id.setoutDataContent);
+		mDateTextView.setOnClickListener(this);
+		
+		mQuiryButton = (RelativeLayout)view.findViewById(R.id.quiryTickerButton);
+		mQuiryButton.setOnClickListener(this);
+	
+		String result = "上海";
+		Bundle bundle = getArguments();
+		if (bundle != null && !isDestination) {
+			result = bundle.getString("params");
+			mSetOutTextView.setText(result);
+		} else if (bundle != null && isDestination) {
+			result = bundle.getString("params");
+			mArriveTextView.setText(result);
+		}
 //		QuiryTickerManage quiryTickerManage = new QuiryTickerManage();
 		
 //		mListView = (ListView) view.findViewById(R.id.tickerListView);
@@ -69,22 +90,54 @@ public class QuiryTickerFragment extends Fragment implements OnClickListener {
 		// TODO Auto-generated method stub
 		View view = arg0;
 		switch (view.getId()) {
-		case R.id.SetOutTextView:
-		case R.id.ArrivalTextView:
+		case R.id.SetOutTextView:    //出发地
+			isDestination = false;
 			enterStationList();
 			break;
-		case R.id.freshImageView:
-
+		case R.id.ArrivalTextView:   //到达地
+			isDestination = true;
+			enterStationList();
+			break;
+		case R.id.freshImageView:     //刷新
+			String text =  mArriveTextView.getText().toString();
+			mArriveTextView.setText(mSetOutTextView.getText());
+			mSetOutTextView.setText(text);
+			break;
+		case R.id.setoutDataContent:  //日期选择
+			Calendar cal = Calendar.getInstance();
+			new DatePickerDialog(QuiryTickerFragment.this.getActivity(), QuiryTickerFragment.this, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).show();
+			break;
+		case R.id.quiryTickerButton: //查询
+			quiryTicker();
 			break;
 		default:
 			break;
 		}
 	}
 
+	private void quiryTicker() {
+		QuiryConditonEntity entity = new QuiryConditonEntity();
+		entity.setTrainData(mDateTextView.getText().toString());
+		String setoutID = mSearchAlgorithm.getEnglishID(mSetOutTextView.getText().toString());
+		String arriveID = mSearchAlgorithm.getEnglishID(mArriveTextView.getText().toString());
+		entity.setFromStation(setoutID);
+		entity.setToStation(arriveID);
+		entity.setPurposeCodes("ADULT");
+		mQuiryTickerManage.updateTicker(entity);
+	}
+	
 	private void enterStationList() {
 		StationListFragment fragment = new StationListFragment();
 		MainActivity activity = (MainActivity) QuiryTickerFragment.this.getActivity();
 		activity.switchFragment(this, fragment, true); 
+	}
+
+	@Override
+	public void onDateSet(DatePicker view, int year, int monthOfYear,
+			int dayOfMonth) {
+		// TODO Auto-generated method stub
+		String date = "" + year + "-" + monthOfYear + "-" + dayOfMonth;
+		mDateTextView.setText(date);
 	}
 	
 	
