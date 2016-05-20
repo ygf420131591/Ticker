@@ -4,13 +4,18 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import com.android.ticker.activitys.MainActivity;
+import com.android.ticker.activitys.TIckerInfoActivity;
 import com.android.ticker.algorithm.SearchAlgorithm;
 import com.android.ticker.managers.QuiryTickerManage;
+import com.android.ticker.managers.QuiryTickerManage.UpdateTickerRes;
 import com.android.ticker.managers.entitys.QuiryConditonEntity;
+import com.android.ticker.managers.entitys.TickerInfo;
 import com.example.ticker.R;
+
 
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -25,7 +30,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class QuiryTickerFragment extends Fragment implements OnClickListener, OnDateSetListener {
+public class QuiryTickerFragment extends Fragment implements OnClickListener, OnDateSetListener, UpdateTickerRes {
 
 	private ListView mListView;
 	private TextView mSetOutTextView;
@@ -115,6 +120,9 @@ public class QuiryTickerFragment extends Fragment implements OnClickListener, On
 		}
 	}
 
+	/**
+	 * 查询车票
+	 */
 	private void quiryTicker() {
 		QuiryConditonEntity entity = new QuiryConditonEntity();
 		entity.setTrainData(mDateTextView.getText().toString());
@@ -123,7 +131,7 @@ public class QuiryTickerFragment extends Fragment implements OnClickListener, On
 		entity.setFromStation(setoutID);
 		entity.setToStation(arriveID);
 		entity.setPurposeCodes("ADULT");
-		mQuiryTickerManage.updateTicker(entity);
+		mQuiryTickerManage.updateTicker(entity, this);
 	}
 	
 	private void enterStationList() {
@@ -138,6 +146,18 @@ public class QuiryTickerFragment extends Fragment implements OnClickListener, On
 		// TODO Auto-generated method stub
 		String date = "" + year + "-" + monthOfYear + "-" + dayOfMonth;
 		mDateTextView.setText(date);
+	}
+
+	/**
+	 * 获取车票信息成功
+	 * @param tickerInfo
+	 */
+	@Override
+	public void updateTickerRes(TickerInfo tickerInfo) {
+		// TODO Auto-generated method stub
+		
+		Intent intent = new Intent(QuiryTickerFragment.this.getActivity(), TIckerInfoActivity.class);
+		QuiryTickerFragment.this.getActivity().startActivity(intent);
 	}
 	
 	

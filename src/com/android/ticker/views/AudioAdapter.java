@@ -5,8 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 
 
+import android.R.drawable;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,10 +20,10 @@ import android.widget.TextView;
 
 public class AudioAdapter extends BaseAdapter {
 
-	List<HashMap<String, Object>> mListItem; //textÄÚÈÝºÍimage source ID
-	String[] mKeys;   //textviewµÄtext¹Ø¼ü´ÊºÍimage source ID¹Ø¼ü´Ê
-	int[] mSources;   //²¼¾ÖÖÐ¿Ø¼þid
-	int mLayout;  //²¼¾ÖÎÄ¼þ
+	List<HashMap<String, Object>> mListItem; //textï¿½ï¿½ï¿½Ýºï¿½image source ID
+	String[] mKeys;   //textviewï¿½ï¿½textï¿½Ø¼ï¿½ï¿½Êºï¿½image source IDï¿½Ø¼ï¿½ï¿½ï¿½
+	int[] mSources;   //ï¿½ï¿½ï¿½ï¿½ï¿½Ð¿Ø¼ï¿½id
+	int mLayout;  //ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½
 	Context mContext;  
 	LayoutInflater mLayoutInflater;
 
@@ -95,14 +97,14 @@ public class AudioAdapter extends BaseAdapter {
 			holder.mContentTextView.setVisibility(View.GONE);
 		}
 		if (mListItem.get(position).containsKey(mKeys[2])) {
-			int sourceId = (int) mListItem.get(position).get(mKeys[2]);
-			holder.mImageView.setImageDrawable(mContext.getResources().getDrawable(sourceId));
+			Drawable drawable = (Drawable) mListItem.get(position).get(mKeys[2]);
+			holder.mImageView.setImageDrawable(drawable);
 			holder.mImageView.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					Log.d("AudioAdapter", "µã»÷click");
+					Log.d("AudioAdapter", "ï¿½ï¿½ï¿½click");
 				}
 			});
 			holder.mImageView.setVisibility(View.VISIBLE);

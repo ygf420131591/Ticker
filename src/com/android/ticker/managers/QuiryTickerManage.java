@@ -10,6 +10,8 @@ import com.google.gson.Gson;
 
 public class QuiryTickerManage {
 
+	private UpdateTickerRes mUpdateTickerRes;
+	
 	public QuiryTickerManage() {
 		
 //		HttpManager http = new HttpManager();
@@ -27,7 +29,9 @@ public class QuiryTickerManage {
 		
 	}
 	
-	public void updateTicker(QuiryConditonEntity condition) {
+	public void updateTicker(QuiryConditonEntity condition, UpdateTickerRes updateTickerRes) {
+		
+		mUpdateTickerRes = updateTickerRes;
 		
 		String url = "https://kyfw.12306.cn/otn/leftTicket/query?";
 		url = url + "leftTicketDTO.train_date=" + condition.getTrainData() + "&";
@@ -43,10 +47,16 @@ public class QuiryTickerManage {
 				// TODO Auto-generated method stub
 				Gson gson = new Gson();
 				TickerInfo tickerInfo = gson.fromJson(data, TickerInfo.class);
+				mUpdateTickerRes.updateTickerRes(tickerInfo);
 				Log.d("HttpManager", data);
+				
 			}
 		});
 		
+	}
+	
+	public interface UpdateTickerRes {
+		public void updateTickerRes(TickerInfo tickerInfo); 
 	}
 	
 }
